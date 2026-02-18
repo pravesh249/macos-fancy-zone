@@ -7,10 +7,16 @@ class OverlayManager: InputMonitorDelegate {
     static let shared = OverlayManager()
     
     private var panel: OverlayPanel?
-    private var currentLayout: ZoneLayout = ZoneLayout.wideCenter
+    private var currentLayout: ZoneLayout
+    private var layouts: [ZoneLayout] = []
     private var activeZoneIndex: Int?
     
-    private init() {}
+    private init() {
+        // Load layouts or fallback to defaults
+        let loaded = LayoutRepository.shared.getAllLayouts()
+        self.layouts = loaded
+        self.currentLayout = loaded.first ?? ZoneLayout.wideCenter
+    }
     
     func setup() {
         // Create panel covering the main screen
@@ -83,17 +89,26 @@ class OverlayManager: InputMonitorDelegate {
     }
     
     func cycleLayout() {
-        switch currentLayout.name {
-        case ZoneLayout.priorityGrid.name:
-            currentLayout = ZoneLayout.threeColumn
-        case ZoneLayout.threeColumn.name:
-            currentLayout = ZoneLayout.twoByTwo
-        case ZoneLayout.twoByTwo.name:
-            currentLayout = ZoneLayout.wideCenter
-        default:
-            currentLayout = ZoneLayout.priorityGrid
+        guard let currentIndex = layouts.firstIndex(where: { $0.name == currentLayout.name }) else {
+            currentLayout = layouts.first ?? ZoneLayout.wideCenter
+            updateView()
+            return
         }
+        
+        let nextIndex = (currentIndex + 1) % layouts.count
+        currentLayout = layouts[nextIndex]
+        
         updateView()
         print("Switched layout to: \(currentLayout.name)")
+    }
+    
+    func reloadLayouts() {
+        let loaded = LayoutRepository.shared.getAllLayouts()
+        self.layouts = loaded
+        // Keep current if exists, else reset
+        if !layouts.contains(where: { $0.name == currentLayout.name }) {
+            currentLayout = layouts.first ?? ZoneLayout.wideCenter
+        }
+        updateView()
     }
 }

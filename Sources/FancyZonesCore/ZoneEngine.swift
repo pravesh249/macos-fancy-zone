@@ -5,7 +5,7 @@ import CoreGraphics
 
 /// A single zone defined by a normalized rect (0.0–1.0 relative to screen).
 /// Origin is Top-Left (like CSS/Windows), Y increases downward.
-public struct Zone: Identifiable, Sendable {
+public struct Zone: Identifiable, Sendable, Codable {
     public let id: UUID
     public let rect: CGRect
 
@@ -16,7 +16,8 @@ public struct Zone: Identifiable, Sendable {
 }
 
 /// A collection of zones with a name and gap spacing.
-public struct ZoneLayout: Sendable {
+public struct ZoneLayout: Sendable, Codable, Identifiable {
+    public var id: String { name }
     public let name: String
     /// Gap in points between zones (applied as inset on each side).
     public let spacing: CGFloat

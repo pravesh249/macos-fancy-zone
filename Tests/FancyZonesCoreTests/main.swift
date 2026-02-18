@@ -7,6 +7,7 @@ runZoneLayoutTests()
 runHitTestingTests()
 runCoordinateTests()
 runAXFrameTests()
+runLayoutEditorLogicTests()
 
 print("\n" + String(repeating: "─", count: 50))
 print("Results: \(passed) passed, \(failed) failed")
