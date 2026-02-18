@@ -1,0 +1,24 @@
+# Swift build artifacts
+.build/
+*.o
+*.d
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+xcuserdata/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# SPM resolved file (commit if you want reproducible builds, ignore for personal projects)
+Package.resolved
